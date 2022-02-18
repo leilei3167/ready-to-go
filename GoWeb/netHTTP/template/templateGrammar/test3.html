@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Test golang template</title>
+</head>
+<body>
+
+    {{range $x := . -}}
+        {{println $x}}
+    {{- end}}
+
+</body>
+</html>

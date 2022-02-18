@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Test golang template</title>
+</head>
+<body>
+    {{`"output"`}} <br>
+    {{printf "%q" "output"}}<br>
+    {{"output" | printf "%q"}}<br>
+    {{printf "%q" (print "out" "put")}}<br>
+    {{"put" | printf "%s%s" "out" | printf "%q"}}<br>
+    {{"output" | printf "%s" | printf "%q"}}<br>
+</body>
+</html>
