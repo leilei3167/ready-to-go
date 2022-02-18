@@ -7,6 +7,6 @@
     "options": "json=omitempty",
     "promptForTags": false,
     // snakecase:下划线分隔， camelcase:驼峰命名
-    "transform": "snakecase"
+    "transform": "camelcase"
   },
 }

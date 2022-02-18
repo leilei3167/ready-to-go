@@ -9,7 +9,12 @@ type User struct {
 	Gender   string   `form:"gender"`
 	City     string   `form:"city"`
 }
+type Query struct {
+	name string `form:"name"`
+	text string `form:"text"`
+}
 
+//
 //以html页面响应
 func GoRegister(c *gin.Context) {
 	c.HTML(200, "testform.html", nil)
@@ -20,6 +25,14 @@ func formbind(c *gin.Context) {
 	var user User
 	c.ShouldBind(&user)
 	c.String(200, "form data:%s", user)
+
+}
+func testQueryBind(c *gin.Context) {
+	//还可以绑定查询参数
+	var query Query
+	c.ShouldBind(&query)
+	c.String(200, "query 获取到了查询字段:%s", query)
+
 }
 
 //低效的方法,挨个取出form值
@@ -42,5 +55,6 @@ func main() {
 	e.GET("/testForm", GoRegister) //执行展示
 	//获取页面提交的表单信息
 	e.POST("/register", formbind) //表单中设置的action跳转到/register
+	e.GET("/testQueryBind", testQueryBind)
 	e.Run(":9090")
 }
