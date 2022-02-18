@@ -1,0 +1,12 @@
+{
+    // 结构体tag 设置
+  "go.addTags": {
+    // 可配置多个tag json,orm
+    "tags": "json,form",
+    // options 可以填入json=omitempty
+    "options": "json=omitempty",
+    "promptForTags": false,
+    // snakecase:下划线分隔， camelcase:驼峰命名
+    "transform": "snakecase"
+  },
+}
