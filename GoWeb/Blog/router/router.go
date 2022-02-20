@@ -11,10 +11,19 @@ func Start() {
 	e.LoadHTMLGlob("templates/*")   //模板路径
 	e.Static("/assets", "./assets") //静态资源路径
 
-	e.GET("/", controller.Index)              //主页
-	e.GET("/register", controller.GoRegister) //去到注册页面
-
+	e.GET("/", controller.Index) //主页
+	//注册
+	e.GET("/register", controller.GoRegister)
 	e.POST("/register", controller.Register)
+	//登录
+	e.GET("/login", controller.GoLogin)
+	e.POST("login", controller.Login)
+
+	//博客操作
+	e.GET("/post_index", controller.GetPostIndex)//列表
+	e.POST("/post", controller.AddPost)//添加博客
+	e.GET("/post", controller.GoAddPost)//跳转到添加博客页面
 
 	e.Run()
+
 }

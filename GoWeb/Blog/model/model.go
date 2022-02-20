@@ -7,3 +7,10 @@ type User struct {
 	Username   string `json:"username,omitempty" `
 	Password   string `json:"password,omitempty" `
 }
+//博客模型
+type Post struct {
+	gorm.Model
+	Title   string
+	Content string `gorm:"type:text"`
+	Tag     string
+}
