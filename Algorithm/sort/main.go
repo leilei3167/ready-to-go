@@ -101,7 +101,7 @@ func quicksort(s []int) []int {
 	if len(s) <= 1 { //递归判断
 		return s
 	}
-	splitdata := s[0]         //基准数,取第一个
+	splitdata := s[0]         //基准数,一般取第一个
 	low := make([]int, 0, 0)  //比基准数小的
 	high := make([]int, 0, 0) //比基准数大的
 	mid := make([]int, 0, 0)  //和基准数一样大的数
