@@ -40,7 +40,7 @@ func find(db *gorm.DB) {
 	fmt.Println("根据主键查询:", p)
 
 	//根据条件来查询
-	db.First(&p, "code=?", "1001")
+	db.First(&p, "code=?", "1002")
 	fmt.Println("根据条件查询结果:", p)
 
 }
@@ -76,7 +76,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	//find(db)
+	find(db)
 	//update(db)
-	del(db)
+	//del(db)
 }
