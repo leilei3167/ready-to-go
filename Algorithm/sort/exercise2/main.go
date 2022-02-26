@@ -10,6 +10,7 @@ func main() {
 	bubblesort(randNum())
 	selectsort(randNum())
 	insertsort(randNum())
+	testquicksort()
 }
 
 //生成随机切片
