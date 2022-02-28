@@ -1,22 +1,78 @@
 package main
 
-import "sync"
+import (
+	"fmt"
+	"sync"
+)
 
 func main() {
-	rangeclosure()
+	rangeTrap()
+	rangeTrap2()
+	rangeTrap3()
+	rangeTrap4()
 }
 
-//for range中开启协程造成闭包的问题
-func rangeclosure() {
+/*for range陷阱:
+在一个range循环中,其中的k始终的地址都是不变的(可以循环打印k的地址验证),如果在迭代中使用k,将会使其每一次都被新的值覆盖
+*/
+//for range陷阱1:只会输出四个4
+func rangeTrap() {
 	wg := sync.WaitGroup{}
 	si := []int{1, 2, 3, 5, 6}
-	for i := range si {
+	for k, v := range si { //i为0到4
 		wg.Add(1)
+		//fmt.Println("out:", k, v)
+		//time.Sleep(time.Second) //此处是由于range瞬间结束,最终值被更新为4,所以协程全部打印4(i的地址不变,上面的值会更新为最新值)
+		//添加等待后就能发现能够按照顺序输出123
 		go func() {
-			println(i) //形成闭包,因为引用了外部变量i
+			println(k, v)
 			wg.Done()
 		}()
 	}
 	wg.Wait()
 
+}
+
+//输出123123 而不是成为永动机,因为每一个range中都会将原切片拷贝,并获取到了原切片的长度,所以在循环中增加新元素也不会改变循环次数
+func rangeTrap2() {
+	si := []int{1, 2, 3}
+	for _, v := range si { //因为被range 的si此刻是一个副本,其长度是固定的
+		si = append(si, v)
+	}
+	fmt.Println(si)
+}
+
+//会输出333,对于需要取得元素的range,会额外创建一个新的变量用于存储获得的元素,在循环中使用这个变量将会是的其在每一次迭代被新值覆盖
+func rangeTrap3() {
+	arr := []int{1, 2, 3}
+	newArr := []*int{}
+	//v的值就像是:1,22,333即每次被更新,之前添加的v值会随着改变
+	for _, v := range arr {
+		newArr = append(newArr, &v) //正确的方法应该是按照i来取值,即&arr[i]
+	}
+	for k, v := range newArr {
+		fmt.Println(k, *v)
+	}
+}
+func rangeTrap4() {
+	funcs := []func(){}       //以匿名函数为values的切片
+	for i := 0; i < 10; i++ { //添加10个打印临时变量i的匿名函数进去
+		funcs = append(funcs, func() {
+			fmt.Println(i)
+		})
+	} //重点陷阱:出循环时i=10,之前添加的i全部为10
+	for i := 0; i < 10; i++ {
+		f := func(index int) func() { //构成闭包,引用了外部变量i,i被分配到堆上
+			return func() {
+				fmt.Println(index)
+			}
+
+		}(i)
+		funcs = append(funcs, f) //添加10个闭包,与闭包绑定的值为0-9(虽然出循环
+	}
+	for _, v := range funcs {
+		v() //每一个储存的匿名函数执行
+
+	}
+	//会输出10个10,0-9
 }
