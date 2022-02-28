@@ -2,14 +2,20 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"sync"
+	"time"
 )
 
 func main() {
-	rangeTrap()
-	rangeTrap2()
-	rangeTrap3()
-	rangeTrap4()
+	//	rangeTrap()
+	//	rangeTrap2()
+	//	rangeTrap3()
+	//	rangeTrap4()
+	//commaMap()
+	//commaChan()
+	commaInterface()
+	fmt.Println(os.Getwd())
 }
 
 /*for range陷阱:
@@ -75,4 +81,59 @@ func rangeTrap4() {
 
 	}
 	//会输出10个10,0-9
+}
+
+/*comma,ok表达式*/
+func commaMap() {
+	//1.用于判断map中某个键是否存在值,因为查找一个不存在的key,只会返回零值
+	m := make(map[string]string)
+	v, ok := m["nigger"]
+	if !ok {
+		println("不存在这个值")
+	} else {
+		println(v)
+	}
+
+}
+func commaChan() {
+	//2.读取一个已关闭的chan时不会阻塞,而是返回零值,此表达式可判断chan是否关闭
+	c := make(chan int)
+	go func() {
+		c <- 1
+		time.Sleep(time.Second)
+		c <- 2
+		time.Sleep(time.Second)
+		c <- 3
+		time.Sleep(time.Second)
+
+		close(c)
+	}()
+	/*	for {
+		v, ok := <-c
+		if ok {
+			println(v)
+		} else {//一旦关闭,就会返回false
+			println("c已关闭,退出")
+			break
+		}
+	}*/
+	//直接使用range也可以,chan关闭就会立刻感知到
+	for v := range c {
+		println(v)
+	}
+
+}
+
+//3.类型断言或类型选择,用于判断接口所绑定的实例,是否同时实现了另一个接口或是该实例是否是某个类型
+func commaInterface() {
+	var x interface{}
+	x = 1
+	v, ok := x.(int32) //x是否是string类型,若是,其值会被复制给v,并且ok为true
+	if ok {
+		fmt.Println("断言成功,他就是断言的类型", v)
+	} else {
+		fmt.Printf("断言失败,v的值%#v\n\n", v) //若断言失败,v为断言类型的零值,ok为false
+
+	}
+	//如果要断言多个类型的话就可以用 switch v:=x.(type)
 }
