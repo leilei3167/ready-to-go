@@ -20,9 +20,9 @@ func Start() {
 	e.POST("login", controller.Login)
 
 	//博客操作
-	e.GET("/post_index", controller.GetPostIndex)//列表
-	e.POST("/post", controller.AddPost)//添加博客
-	e.GET("/post", controller.GoAddPost)//跳转到添加博客页面
+	e.GET("/post_index", controller.GetPostIndex) //列表
+	e.POST("/post", controller.AddPost)           //添加博客
+	e.GET("/post", controller.GoAddPost)          //跳转到添加博客页面
 
 	e.Run()
 

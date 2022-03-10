@@ -26,7 +26,7 @@ var Mgr Manager
 
 //初始化函数只会执行一次,用来链接数据库
 func init() {
-	dsn := "root:8888@/golang_db?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := "root:8888@tcp(47.97.69.226:3306)/golang_db?charset=utf8mb4&parseTime=True&loc=Local"
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic(err)
