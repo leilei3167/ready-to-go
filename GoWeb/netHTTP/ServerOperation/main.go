@@ -30,10 +30,10 @@ func handlerput(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	//1.创建路由
+	//1.创建多路复用器
 	router := http.NewServeMux()
 
-	//2.创建实例并实现ServeHTTP方法,并注册到路由
+	//2.注册处理器,注册处理器函数
 	router.Handle("/hello", &fucker{})
 	router.HandleFunc("/hi", handlerput) //此方法也能够实现注册
 	//3.配置server
