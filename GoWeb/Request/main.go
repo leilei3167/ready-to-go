@@ -1,11 +1,13 @@
 package main
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"time"
 )
 
 //获取请求header
@@ -86,6 +88,8 @@ func Json(w http.ResponseWriter, r *http.Request) {
 	w.Write(data)
 
 }
+
+//未设置过期时间,默认为会话cookie,在浏览器关闭之后cookie会消失
 func cookie(w http.ResponseWriter, r *http.Request) {
 	c1 := http.Cookie{
 		Name:     "first_cookie",
@@ -109,15 +113,72 @@ func cookie(w http.ResponseWriter, r *http.Request) {
 	http.SetCookie(w, &c3)
 
 }
+func getcookie(w http.ResponseWriter, r *http.Request) {
+	//直接从Header中获取,返回的是字符串切片
+	h := r.Header["Cookie"]
+	fmt.Fprintln(w, "get cookie:", h)
+	//用Cookie,获取指定cookie
+	c1, err := r.Cookie("first_cookie")
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprintln(w, "找不到cookie")
+	}
+	//获取所有cookie,和直接Header["Cookie"]结果一致
+	cs := r.Cookies()
+	fmt.Fprintln(w, c1)
+	fmt.Fprintln(w, cs)
+
+}
+
+func setMessage(w http.ResponseWriter, r *http.Request) {
+	//如果Value中有空格等特殊字符,则需要进行编码
+	msg := []byte("hello world!!!!")
+	c := http.Cookie{
+		Name:  "flash",
+		Value: base64.URLEncoding.EncodeToString(msg),
+	}
+	http.SetCookie(w, &c)
+
+}
+
+func getMessage(w http.ResponseWriter, r *http.Request) {
+	//获取cookie
+	c, err := r.Cookie("flash")
+	if err != nil {
+		if err == http.ErrNoCookie {
+			fmt.Fprintln(w, "there is no cookie yet")
+		}
+
+	} else {
+		//设置同名cookie 覆盖设置,将MaxAge设置为-1表示已过期,删除这个cookie,过期时间也设置为过去的时间
+		rc := http.Cookie{
+			Name:    "flash",
+			MaxAge:  -1,
+			Expires: time.Unix(1, 0),
+		}
+		http.SetCookie(w, &rc)
+		//解码获得cookie中的value
+		val, _ := base64.URLEncoding.DecodeString(c.Value)
+		fmt.Fprintln(w, "解码cookie:", string(val))
+
+	}
+
+}
+
 func main() {
 
-	http.HandleFunc("/header", header)     //获取请求头
-	http.HandleFunc("/body", body)         //获取请求体
-	http.HandleFunc("/process", process)   //获取表单信息
-	http.HandleFunc("/file", file)         //获取被上传到服务器的文件
-	http.HandleFunc("/response", response) //构建Response
-	http.HandleFunc("/Json", Json)         //Json回应
-	http.HandleFunc("/cookie", cookie)     //Json回应
+	http.HandleFunc("/header", header)       //获取请求头
+	http.HandleFunc("/body", body)           //获取请求体
+	http.HandleFunc("/process", process)     //获取表单信息
+	http.HandleFunc("/file", file)           //获取被上传到服务器的文件
+	http.HandleFunc("/response", response)   //构建Response
+	http.HandleFunc("/Json", Json)           //Json回应
+	http.HandleFunc("/cookie", cookie)       //设置cookie
+	http.HandleFunc("/getcookie", getcookie) //获取cookie
+
+	//用cookie实现闪现消息
+	http.HandleFunc("/setflash", setMessage)
+	http.HandleFunc("/getflash", getMessage)//设置cookie后 getcookie之后刷新cookie即消失 
 
 	http.ListenAndServe(":8081", nil)
 }
