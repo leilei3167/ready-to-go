@@ -124,5 +124,3 @@ func readbyNum() {
 	}
 
 }
-
-//3.2使用syscall库,过于底层一般不使用
