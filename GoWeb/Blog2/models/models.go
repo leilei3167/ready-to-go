@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/leilei3167/ready-to-go/GoWeb/Blog2/pkg/setting"
-	"gorm.io/gorm"
 )
 
-/* 数据库模型 和连接相关 */
 var db *gorm.DB
 
 type Model struct {
