@@ -1,3 +1,4 @@
+//用于同意注册处理器和中间件
 package routers
 
 import (
@@ -12,6 +13,7 @@ func InitRouter() *gin.Engine {
 	r := gin.New()
 	r.Use(gin.Recovery())
 	r.Use(gin.Logger())
+	//后续可以在此进行扩展中间件
 	gin.SetMode(setting.RunMode)
 
 	//注册路由组

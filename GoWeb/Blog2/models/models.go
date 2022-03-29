@@ -1,6 +1,7 @@
+//此包统一进行数据库交互
 package models
 
-/* 此包对DB的句柄进行统一管理 */
+
 import (
 	"fmt"
 	"log"
@@ -14,6 +15,7 @@ import (
 //句柄
 var db *gorm.DB
 
+//Model为三个表的公共字段
 type Model struct {
 	ID         int `gorm:"primary_key" json:"id"`
 	CreatedOn  int `json:"created_on"`
