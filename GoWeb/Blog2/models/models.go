@@ -21,7 +21,8 @@ type Model struct {
 }
 
 func init() {
-	//先从配置文件中获取数据库的配置
+	//先从配置文件中获取数据库的配置,私有项,因为不希望数据库相关的内容
+	//被随意调用
 	var (
 		err                                               error
 		dbType, dbName, user, password, host, tablePrefix string
@@ -59,6 +60,7 @@ func init() {
 	db.LogMode(true)
 	db.DB().SetMaxIdleConns(10)
 	db.DB().SetMaxOpenConns(100)
+	
 }
 
 //关闭数据库

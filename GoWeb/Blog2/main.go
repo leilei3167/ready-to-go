@@ -4,19 +4,12 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/gin-gonic/gin"
 	"github.com/leilei3167/ready-to-go/GoWeb/Blog2/pkg/setting"
+	"github.com/leilei3167/ready-to-go/GoWeb/Blog2/routers"
 )
 
 func main() {
-	r := gin.Default()
-
-	r.GET("/test", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "test OK",
-		})
-
-	})
+	r := routers.InitRouter()
 	//配置下server
 	s := &http.Server{
 		//配置文件指定的端口
