@@ -14,6 +14,7 @@ var MsgFlags = map[int]string{
 	ERROR_AUTH:                     "Token错误",
 }
 
+//根据错误码返回对应的信息
 func GetMsg(code int) string {
 	msg, ok := MsgFlags[code]
 	if ok {
