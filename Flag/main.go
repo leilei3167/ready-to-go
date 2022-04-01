@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"os"
 )
 
 //编写命令行程序（工具、server）时，我们有时需要对命令参数进行解析
@@ -13,10 +14,12 @@ import (
 
 var (
 	name = flag.String("name", "root", "输入姓名")
+	//若不指定install 将会默认是false
+	install = flag.Bool("install", false, "是否要安装")
 )
 
 func main() {
-	flag.Parse()
+
 	//主要2种定义flag的方法 分别是直接定义或者放入到某个变量
 	//1.flag.Type(flag的名字,默认值,帮助信息)*Type
 	//如 name=flag.String("name","张三","姓名")
@@ -28,7 +31,15 @@ func main() {
 	//flag.StringVar(&name,"name","leilei","名字")
 
 	//通过以上2种方式定义好flag参数后,必须调用flag.Parse来进行解析
+	//如果没有输入任何的值的话,则执行打印所有的默认信息
+	flag.Parse()
+	if len(os.Args) <= 1 {
+		flag.PrintDefaults()
+		//return
+	}
 	fmt.Println(*name)
 	//输入-name=leilei 则会打印leilei
 	//输入 -h则会显示帮助信息
+	fmt.Println(*install)
+	fmt.Printf("``is %T,\"\"is %T\n", `stata/sda/sad`, "agag/asd/cxz")
 }
