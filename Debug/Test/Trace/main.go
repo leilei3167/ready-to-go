@@ -6,7 +6,7 @@ import (
 	"runtime/trace"
 	"time"
 )
-
+//https://zhuanlan.zhihu.com/p/332501892
 func generate(n int) []int {
 	rand.Seed(time.Now().UnixNano())
 	nums := make([]int, 0)

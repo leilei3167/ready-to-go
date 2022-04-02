@@ -7,6 +7,8 @@ import (
 	"time"
 )
 
+//导入runtime/pprof即可使用
+
 func generate(n int) []int {
 	rand.Seed(time.Now().UnixNano())
 	nums := make([]int, 0)
@@ -24,7 +26,6 @@ func bubbleSort(nums []int) {
 		}
 	}
 }
-
 
 func main() {
 	//创建文件记录数据

@@ -11,6 +11,7 @@ func main() {
 	//remove() //删除a.txt或文件夹
 	writeFile()
 	readFile()
+
 }
 
 //创建文件

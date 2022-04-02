@@ -8,9 +8,9 @@ import (
 )
 
 func main() {
-	//	rangeTrap()
+	//rangeTrap()
 	//	rangeTrap2()
-	//	rangeTrap3()
+	rangeTrap3()
 	//	rangeTrap4()
 	//commaMap()
 	//commaChan()
