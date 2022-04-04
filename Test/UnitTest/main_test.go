@@ -2,6 +2,7 @@ package UnitTest
 
 //包名必须以_test结尾
 import (
+	"github.com/stretchr/testify/assert"
 	"reflect"
 	"testing"
 )
@@ -58,17 +59,85 @@ func TestSplitAll(t *testing.T) {
 	}{
 		{"case1", "a:b:c", ":", []string{"a", "b", "c"}},
 		{"case2", "a+b+c/d", "+c", []string{"a+b", "/d"}},
-		{"case3", "a::c", ":", []string{"a", "c"}},
-		{"case4", "雷磊你好", "磊", []string{"雷", "你好"}},
+		{"case3", "a:c", ":", []string{"a", "c"}},
 	}
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			got := Split(test.input, test.sep)
-			if !reflect.DeepEqual(test.input, test.want) {
+			if !reflect.DeepEqual(got, test.want) {
 				t.Errorf("%s err!want:%s got:%s\n", test.name, test.want, got)
 			}
 		})
+	}
+
+}
+
+//并行测试,添加t.Parallel()即可使测试用例并行化
+func TestSplit2(t *testing.T) {
+	t.Parallel() //此处让Tlog标记为能够与其他测试并行运行
+	tests := []struct {
+		name  string
+		input string
+		sep   string
+		want  []string
+	}{
+		{"case1", "a:b:c", ":", []string{"a", "b", "c"}},
+		{"case2", "a+b+c/d", "+c", []string{"a+b", "/d"}},
+		{"case3", "a:c", ":", []string{"a", "c"}},
+	}
+
+	for _, test := range tests {
+		test := test //重新声明test变量,避免多个goroutine使用相同的变量
+		t.Run(test.name, func(t *testing.T) {
+			t.Parallel() //让多个测试用例能并行运行
+			got := Split(test.input, test.sep)
+			if !reflect.DeepEqual(got, test.want) {
+				t.Errorf("%s err!want:%s got:%s\n", test.name, test.want, got)
+			}
+		})
+	}
+
+}
+
+//Goland自动生成的表格测试,只需要添加case即可,go test -cover 可以看到测试代码覆盖率,一般要求至少要达到80%以上
+func TestSplit1(t *testing.T) {
+	type args struct {
+		s   string
+		sep string
+	}
+	tests := []struct {
+		name       string
+		args       args
+		wantResult []string
+	}{
+		{name: "case1", args: args{s: "a,b,c", sep: ","}, wantResult: []string{"a", "b", "c"}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if gotResult := Split(tt.args.s, tt.args.sep); !reflect.DeepEqual(gotResult, tt.wantResult) {
+				t.Errorf("Split() = %v, want %v", gotResult, tt.wantResult)
+			}
+		})
+	}
+}
+
+//第三方库:testify
+func TestSplit3(t *testing.T) {
+	t.Parallel() //此处让Tlog标记为能够与其他测试并行运行
+	tests := []struct {
+		name  string
+		input string
+		sep   string
+		want  []string
+	}{
+		{"case1", "a:b:c", ":", []string{"a", "b", "c"}},
+		{"case2", "a+b+c/d", "+c", []string{"a+b", "/d"}},
+		{"case3", "a:c", ":", []string{"a", "cd"}},
+	}
+
+	for _, test := range tests {
+		assert.Equal(t, Split(test.input, test.sep), test.want)
 	}
 
 }
