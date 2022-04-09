@@ -2,9 +2,10 @@ package UnitTest
 
 //包名必须以_test结尾
 import (
-	"github.com/stretchr/testify/assert"
 	"reflect"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 //必须以Test开头
