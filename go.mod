@@ -1,4 +1,4 @@
-module github.com/leilei3167/ready-to-go
+module ready-to-go
 
 go 1.18
 
@@ -9,15 +9,17 @@ require (
 	github.com/gin-gonic/gin v1.7.7
 	github.com/go-ini/ini v1.66.4
 	github.com/go-redis/redis v6.15.9+incompatible
-	github.com/go-redis/redis/v8 v8.11.4
+	github.com/go-redis/redis/v8 v8.11.5
+	github.com/golang/mock v1.6.0
 	github.com/jinzhu/gorm v1.9.16
 	github.com/julienschmidt/httprouter v1.3.0
-	github.com/lib/pq v1.10.4
+	github.com/leilei3167/ready-to-go v0.0.0-20220408055126-747acb425b36
+	github.com/lib/pq v1.10.5
 	github.com/stretchr/testify v1.7.1
 	github.com/unknwon/com v1.0.1
-	go.mongodb.org/mongo-driver v1.8.4
-	gorm.io/driver/mysql v1.3.2
-	gorm.io/gorm v1.23.1
+	go.mongodb.org/mongo-driver v1.9.0
+	gorm.io/driver/mysql v1.3.3
+	gorm.io/gorm v1.23.4
 )
 
 require (
@@ -26,7 +28,6 @@ require (
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
-	github.com/fsnotify/fsnotify v1.5.1 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/go-playground/locales v0.13.0 // indirect
 	github.com/go-playground/universal-translator v0.17.0 // indirect
@@ -44,8 +45,6 @@ require (
 	github.com/jinzhu/now v1.1.4 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/compress v1.13.6 // indirect
-	github.com/kr/text v0.2.0 // indirect
-	github.com/leilei3167/toolbox v0.0.0-20220407074154-ad7ca20e7ca8 // indirect
 	github.com/leodido/go-urn v1.2.0 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/matttproud/golang_protobuf_extensions v1.0.1 // indirect
@@ -70,7 +69,6 @@ require (
 	golang.org/x/sys v0.0.0-20220330033206-e17cdc41300f // indirect
 	golang.org/x/text v0.3.7 // indirect
 	google.golang.org/protobuf v1.27.1 // indirect
-	gopkg.in/check.v1 v1.0.0-20200902074654-038fdea0a05b // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 )
