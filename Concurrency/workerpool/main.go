@@ -26,7 +26,7 @@ func (w *Worker) Start(jobQueue chan Job) {
 
 	go func() {
 		successChan <- true
-		for {
+		for { 
 			//获取任务,没有任务会阻塞;当pool关闭jobQueue时会读取到nil
 			job := <-jobQueue
 			if job != nil {
