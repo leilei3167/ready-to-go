@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"sync"
 	"time"
@@ -136,4 +137,19 @@ func commaInterface() {
 
 	}
 	//如果要断言多个类型的话就可以用 switch v:=x.(type)
+}
+
+//4.init函数和全局变量陷阱
+
+var cmd string
+
+//虽然cwd在外部已经声明过，但是:=语句还是将cwd和err重新声明为新的局部变量。因为内部声明的cwd将屏蔽外部的声明，因此上面的代码并不会正确更新包级声明的cwd变量。
+func init() {
+	cmd, err := os.Getwd()
+	if err != nil {
+		log.Fatal(err)
+	}
+	//var err error
+	//cmd, err = os.Getwd() //正确打印
+	log.Println(cmd)
 }
