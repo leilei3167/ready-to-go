@@ -12,7 +12,7 @@ func main() {
 	//rangeTrap()
 	//	rangeTrap2()
 	rangeTrap3()
-	//	rangeTrap4()
+	rangeTrap4()
 	//commaMap()
 	//commaChan()
 	commaInterface()
@@ -55,6 +55,7 @@ func rangeTrap3() {
 	newArr := []*int{}
 	//v的值就像是:1,22,333即每次被更新,之前添加的v值会随着改变
 	for _, v := range arr {
+		//这里取的是v的地址,v的地址始终是相同的
 		newArr = append(newArr, &v) //正确的方法应该是按照i来取值,即&arr[i]
 	}
 	for k, v := range newArr {
@@ -65,7 +66,7 @@ func rangeTrap4() {
 	funcs := []func(){}       //以匿名函数为values的切片
 	for i := 0; i < 10; i++ { //添加10个打印临时变量i的匿名函数进去
 		funcs = append(funcs, func() {
-			fmt.Println(i)
+			fmt.Println(i)//闭包,i逃逸到堆上
 		})
 	} //重点陷阱:出循环时i=10,之前添加的i全部为10
 	for i := 0; i < 10; i++ {
@@ -77,7 +78,8 @@ func rangeTrap4() {
 		}(i)
 		funcs = append(funcs, f) //添加10个闭包,与闭包绑定的值为0-9(虽然出循环
 	}
-	for _, v := range funcs {
+	for k, v := range funcs {
+		fmt.Printf("第%v个\n", k)
 		v() //每一个储存的匿名函数执行
 
 	}
