@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
+	model "ready-to-go/DBoperation/GORM/Model"
 
 	"github.com/jinzhu/gorm"
-	"github.com/leilei3167/ready-to-go/DBoperation/GORM/model"
 )
 
 //Model代表想要在哪个表操作,如果参数是一个实例并且其有主键,则
