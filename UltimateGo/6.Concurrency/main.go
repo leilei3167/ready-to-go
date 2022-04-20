@@ -516,7 +516,7 @@ func main() {
 	//fanOut()
 	//drop()
 	//cancellation()
-
+	fanOutSem()
 	//调用处设置一个最大的等待时长(期间内将会每秒间隔进行重试)
 	ctx, cancle := context.WithTimeout(context.Background(), time.Second*3)
 	defer cancle()
