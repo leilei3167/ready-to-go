@@ -244,14 +244,16 @@ func waitForResult() {
 	}()
 	//阻塞获取结果,不知道会等待多久,所以阻塞延迟是未知的
 	d := <-ch
-	fmt.Println("parent : recv'd signal :", d)
+	fmt.Println("parent : recv'd signal :", d) //绝对不要用打印来尝试确定运行的先后顺序
 	time.Sleep(time.Second)
 	fmt.Println("-------------------------------------------------")
 }
 
 //6.11.2 Fan Out/In
 //运用了wait for result模式
+//要记住此种模式在服务类应用中非常危险(如web),因为每个请求本身就是一个G,要特别注意规模
 func fanOut() {
+	//带缓冲的通道的缓冲尺寸必须经过谨慎考虑
 	children := 2000
 	ch := make(chan string, children)
 	//此处不需要保证,因此使用带缓冲的chan,将有助于减少阻塞延迟(无缓冲必须等待处理完一个才能发送)
@@ -283,13 +285,16 @@ func fanOut() {
 func waitForTask() {
 	//无缓冲Chan代表在信号层面有保证,意味着会有阻塞延迟
 	ch := make(chan string)
+	//worker不断的等待work
 	go func() {
 		d := <-ch //未知的阻塞时间
 		fmt.Println("child : recv'd signal :", d)
 	}()
 	time.Sleep(time.Duration(rand.Intn(500)) * time.Millisecond)
+	//发布一个任务
 	ch <- "data"
 	fmt.Println("parent : sent signal")
+	//和协程中的打印的执行时间是不确定的!!!!!!!!
 	time.Sleep(time.Second)
 	fmt.Println("-------------------------------------------------")
 }
@@ -378,14 +383,13 @@ func cancellation() {
 }
 
 //6.11.7 Fan Out/In Semaphore 信号量提供一个机制控制在某一时间同时工作的G的数量,但是仍然会为每一份工作创建G(不控制G的数量,但控制同时工作的G的数量)
-
 func fanOutSem() {
 	//2000个worker
 	children := 2000
 	ch := make(chan string, children)
 	//同时工作的Worker限制在硬件线程数
 	g := runtime.GOMAXPROCS(0)
-	sem := make(chan bool, g)
+	sem := make(chan bool, g) //这种形式会增加延时,仔细衡量取舍
 	//开2000个worker
 	for c := 0; c < children; c++ {
 		go func(child int) {
@@ -518,6 +522,10 @@ func main() {
 	//cancellation()
 	fanOutSem()
 	//调用处设置一个最大的等待时长(期间内将会每秒间隔进行重试)
+	/* Context */
+	//context.BackGround 和Todo:都可以作为基本的父COntext,但是TODO可以表示后续增加某些控制(只是现在还没想清楚)
+	//context的传递用的是值语义!! 也就是说函数间传递是复制,最大的原因是因为每个函数调用可能都会修改CTX(增加新功能),这样就能够实现在某条执行路径执行结束不会影响上游的执行
+
 	ctx, cancle := context.WithTimeout(context.Background(), time.Second*3)
 	defer cancle()
 	retryTimeout(ctx, time.Second, func(ctx context.Context) error {
