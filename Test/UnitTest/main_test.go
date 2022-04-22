@@ -134,7 +134,7 @@ func TestSplit3(t *testing.T) {
 	}{
 		{"case1", "a:b:c", ":", []string{"a", "b", "c"}},
 		{"case2", "a+b+c/d", "+c", []string{"a+b", "/d"}},
-		{"case3", "a:c", ":", []string{"a", "cd"}},
+		{"case3", "a:c", ":", []string{"a", "c"}},
 	}
 
 	for _, test := range tests {
