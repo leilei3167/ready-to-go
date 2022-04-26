@@ -21,15 +21,16 @@ func Test_helloHandler(t *testing.T) {
 		{"bad case", "", "we need a name"},
 	}
 
-	r := SetupRouter()
+	r := SetupRouter() //可以加入到init中来初始化注册处理器
 
 	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
+		test := tt                            //使每个自测试尽可能的完全独立
+		t.Run(test.name, func(t *testing.T) { //子测试
 			// mock一个HTTP请求
 			req := httptest.NewRequest(
-				"POST",                      // 请求方法
-				"/hello",                    // 请求URL
-				strings.NewReader(tt.param), // 请求参数
+				"POST",                        // 请求方法
+				"/hello",                      // 请求URL
+				strings.NewReader(test.param), // 请求参数
 			)
 
 			// mock一个响应记录器
