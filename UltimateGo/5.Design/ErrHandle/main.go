@@ -27,7 +27,7 @@ func (c *AppError) Error() string {
 func main() {
 	if err := firstCall(10); err != nil {
 		//类型选择
-		switch v := errors.Cause(err).(type) {
+		switch v := errors.Cause(err).(type) { //从error接口中选择其中存储的具体实例是什么?直接用err.(type)也是可行的
 		case *AppError:
 			fmt.Println("Custom App Error:", v.State) //Custom App Error: 99
 		default:
