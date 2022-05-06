@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"strings"
+	"unsafe"
 )
 
 /*
@@ -64,7 +65,12 @@ func main() {
 
 	a := make([]int, 3, 3)
 	a = append(a, 1000)[:len(a)] //任意加入一个元素触发扩容,舍弃元素
-	fmt.Printf("%#v,len:%v,cap:%v", a, len(a), cap(a))
+	fmt.Printf("%#v,len:%v,cap:%v\n", a, len(a), cap(a))
+
+	ip := "127.0.0.1"
+	fmt.Println(unsafe.Sizeof(ip) * 655360)
+	iprange := strings.Split(ip, ".")[0]
+	fmt.Printf("ip:%s\n", iprange)
 	//LimitRead()
 }
 
