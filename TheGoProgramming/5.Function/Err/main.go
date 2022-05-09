@@ -52,6 +52,7 @@ func (l *LoginError) Unwarp() error {
 var ErrLogin = errors.New("Login Time Out!")
 
 func f1() error {
+	//do smoething  ...if err!=nil ...
 	return &LoginError{
 		Name: "login",
 		Time: fmt.Sprintf("%v", time.Now()),
@@ -87,7 +88,12 @@ func main() {
 	log.SetPrefix("Err:")
 	log.SetFlags(0)
 	if err != nil {
-		log.Println(err)
+		switch err.(type) {
+		case *LoginError:
+			log.Println(err)
+		default:
+			log.Println("unkonw Err:", err)
+		}
 	}
 	err = WaitForServer("https://www.youtube.com")
 	if err != nil {
