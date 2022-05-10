@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/Shopify/sarama"
 	"log"
+
+	"github.com/Shopify/sarama"
 )
 
 func main() {
