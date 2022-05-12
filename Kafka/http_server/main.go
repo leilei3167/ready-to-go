@@ -139,6 +139,7 @@ func (ale *accessLogEntry) ensureEncoded() {
 	}
 }
 
+//实现Encode接口必须的两个方法,有此方法才能被转换成压缩数据
 func (ale *accessLogEntry) Length() int {
 	ale.ensureEncoded()
 	return len(ale.encoded)
@@ -215,7 +216,7 @@ func newAccessLogProducer(brokerlist []string) sarama.AsyncProducer {
 	}
 	//如果生产消息失败,那么就打印到标准输出上,注意只有最大重试次数到了才会执行
 	go func() {
-		for err := range producer.Errors() {
+		for err := range producer.Errors() { //在执行close的函数后 这些通道都会被关闭
 			log.Println("Fail to Write access log:", err)
 		}
 	}()
