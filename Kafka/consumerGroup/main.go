@@ -3,13 +3,14 @@ package main
 import (
 	"context"
 	"flag"
-	"github.com/Shopify/sarama"
 	"log"
 	"os"
 	"os/signal"
 	"strings"
 	"sync"
 	"syscall"
+
+	"github.com/Shopify/sarama"
 )
 
 /*
