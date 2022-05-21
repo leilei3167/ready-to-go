@@ -1,0 +1,25 @@
+syntax= "proto3";
+
+/*
+ 格式:
+  message <name>{
+<字段类型> 字段名1 = <tag> //tag从1到2^29-1范围间,1-15占用1个字节,16-2047占用2个字节
+(除了19000-19999之间的数字,是内部保留用的)
+
+
+}
+ */
+ option go_package = "./protobuf";
+
+message CPU{
+    //字符串
+    string brand =1;
+    string name =2;
+    //非负整数
+    uint32 num_cores=3;
+    uint32 num_threads=4;
+    //浮点数
+    double min_ghz=5;
+    double max_ghz=6;
+    
+}
