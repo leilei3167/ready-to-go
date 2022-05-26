@@ -32,6 +32,11 @@ func main() {
 	}
 	a = delrep(a)
 	fmt.Printf("a去重后的值:%#v\n", a)
+
+	x := ""
+	x = strings.TrimSpace(x)
+	fmt.Printf("X的值为:%#v\n", x)
+
 }
 
 //处理范围端口
