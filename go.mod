@@ -62,6 +62,8 @@ require (
 	github.com/fatih/color v1.13.0 // indirect
 	github.com/fatih/structs v1.1.0 // indirect
 	github.com/fsnotify/fsnotify v1.5.4 // indirect
+	github.com/gin-contrib/cors v1.3.1 // indirect
+	github.com/gin-contrib/requestid v0.0.4 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/git-chglog/git-chglog v0.15.1 // indirect
 	github.com/go-logr/logr v1.2.3 // indirect
