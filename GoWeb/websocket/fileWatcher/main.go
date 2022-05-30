@@ -20,7 +20,7 @@ import (
 //实现服务器向客户端主动推送信息,文件变化!
 const (
 	// Time allowed to write the file to the client.
-	writeWait = 10 * time.Second
+	writeWait = 5 * time.Second
 
 	// Time allowed to read the next pong message from the client.
 	pongWait = 60 * time.Second
@@ -29,7 +29,7 @@ const (
 	pingPeriod = (pongWait * 9) / 10
 
 	// Poll file for changes with this period.
-	filePeriod = 10 * time.Second
+	filePeriod = 5 * time.Second
 )
 
 var (
@@ -43,11 +43,11 @@ var (
 )
 
 func readFileIfModified(lastMod time.Time) ([]byte, time.Time, error) {
-	fi, err := os.Stat(filename)
+	fi, err := os.Stat(filename) //获取文件的信息
 	if err != nil {
 		return nil, lastMod, err
 	}
-	if !fi.ModTime().After(lastMod) {
+	if !fi.ModTime().After(lastMod) { //如果修改时间不正确
 		return nil, lastMod, nil
 	}
 	p, err := ioutil.ReadFile(filename)
@@ -59,8 +59,8 @@ func readFileIfModified(lastMod time.Time) ([]byte, time.Time, error) {
 
 func reader(ws *websocket.Conn) {
 	defer ws.Close()
-	ws.SetReadLimit(512)
-	ws.SetReadDeadline(time.Now().Add(pongWait))
+	ws.SetReadLimit(512)                         //设置最大字节,达到了返回错误
+	ws.SetReadDeadline(time.Now().Add(pongWait)) //设置读的deadline
 	ws.SetPongHandler(func(string) error { ws.SetReadDeadline(time.Now().Add(pongWait)); return nil })
 	for {
 		_, _, err := ws.ReadMessage()

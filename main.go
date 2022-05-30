@@ -36,6 +36,7 @@ func main() {
 	x := ""
 	x = strings.TrimSpace(x)
 	fmt.Printf("X的值为:%#v\n", x)
+	
 
 }
 
