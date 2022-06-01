@@ -37,6 +37,14 @@ func main() {
 	x = strings.TrimSpace(x)
 	fmt.Printf("X的值为:%#v\n", x)
 
+	for i := 0; i < 5; i++ {
+		from := (8 / 3) * i //直接取整,舍弃小数
+		log.Println(from)
+
+	}
+
+	depart(123, 4)
+
 }
 
 //处理范围端口
@@ -84,4 +92,25 @@ func delrep(v []int) []int {
 
 	}
 	return result
+}
+
+func depart(len, g int) {
+	fmt.Println("----------------------------------------------------------------------------------")
+	var result []string
+	for i := 0; i < g; i++ {
+		from := (len / g) * i
+		var to int
+		if i < g-1 {
+			to = (len/g)*(i+1) - 1
+		} else {
+			to = len
+		}
+		result = append(result, strconv.Itoa(from)+"-"+strconv.Itoa(to))
+	}
+
+	for _, r := range result {
+		fmt.Println(r)
+	}
+	fmt.Println("----------------------------------------------------------------------------------")
+
 }
