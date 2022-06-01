@@ -36,6 +36,7 @@ func main() {
 	x := ""
 	x = strings.TrimSpace(x)
 	fmt.Printf("X的值为:%#v\n", x)
+	
 
 	for i := 0; i < 5; i++ {
 		from := (8 / 3) * i //直接取整,舍弃小数
