@@ -8,15 +8,19 @@ import (
 )
 
 type IPparser struct {
-	file       io.Reader   //数据源
+	File       io.Reader   //数据源
 	IPChan     chan string //解析成功的结果
 	InvalidIPs chan string //无效的IP列表
 	//Ctx        context.Context
 }
 
+type Parser interface {
+	io.Reader
+}
+
 func NewIPparser(f io.Reader) *IPparser {
 	return &IPparser{
-		file:       f,
+		File:       f,
 		IPChan:     make(chan string, 10000),
 		InvalidIPs: make(chan string, 100),
 	}
@@ -28,7 +32,7 @@ func (i *IPparser) Close() { //文件句柄由调用处关闭
 }
 func (i *IPparser) ReadAndParse() {
 	ch := make(chan string, 1)
-	scanner := bufio.NewScanner(i.file)
+	scanner := bufio.NewScanner(i.File)
 
 	var wg sync.WaitGroup
 	wg.Add(10)

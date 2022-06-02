@@ -4,7 +4,7 @@ import (
 	"github.com/Shopify/sarama"
 	"github.com/gin-gonic/gin"
 	"log"
-	model2 "mapping/internal/master/model"
+	model "mapping/internal/master/model"
 	"mapping/internal/master/service"
 	"net/http"
 	"strings"
@@ -22,7 +22,7 @@ func ScanFromUpload(c *gin.Context) {
 	//构建IP解析
 	var parser *service.IPparser
 	switch p.Type {
-	case "file":
+	case "File":
 		file, err := p.File.Open()
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, responseWithErr("打开上传文件错误", err))
@@ -36,12 +36,13 @@ func ScanFromUpload(c *gin.Context) {
 		parser = service.NewIPparser(ipReader)
 	}
 
-	//TODO:考虑生产者复用
+	//TODO:每一个请求创建一个生产者?考虑共享生产者
 	producer, err := service.GetDefaultProducer()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, responseWithErr("创建producer错误", err))
 		return
 	}
+	//监听错误通道
 	go func() {
 		for producerError := range producer.Errors() {
 			log.Println(producerError)
@@ -51,11 +52,12 @@ func ScanFromUpload(c *gin.Context) {
 	var count uint
 	var wg sync.WaitGroup
 	wg.Add(2)
+	//获取解析完成的ip,将其构建为任务发送至kafka
 	go func() {
 		defer wg.Done()
 		for i := range parser.IPChan {
-			//解析好的ip发送至kafka
-			a := &model2.ScanTask{
+			//构建任务
+			a := &model.ScanTask{
 				IP:    i,
 				Ports: p.Ports,
 			}
@@ -65,7 +67,7 @@ func ScanFromUpload(c *gin.Context) {
 			//	log.Printf("已发送IP:%v:%v", a.IP, a.Ports)
 		}
 	}()
-	in := make([]string, 0)
+	in := make([]string, 0) //过滤无效的ip
 	go func() {
 		defer wg.Done()
 		for i := range parser.InvalidIPs {
@@ -78,7 +80,7 @@ func ScanFromUpload(c *gin.Context) {
 	wg.Wait()        //说明所有G已退出
 	producer.Close() //关闭生产者
 
-	c.JSON(http.StatusOK, model2.Response{
+	c.JSON(http.StatusOK, model.Response{
 		InvalidIP: in,
 		HasSent:   count,
 	})

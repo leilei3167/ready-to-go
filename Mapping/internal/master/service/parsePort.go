@@ -18,14 +18,15 @@ func ParsePorts(s string) ([]int, error) {
 	case s == "top1000":
 		return code.TOP1000, nil
 	case s == "all":
-		//		return util.All,nil
-		return nil, errors.New("ParsePorts:暂时不支持all扫描")
+		return code.All, nil
+		//return nil, errors.New("ParsePorts:暂时不支持all扫描")
 	case s == "":
 		return nil, errors.New("ParsePorts:无效的scantype")
 	default:
 		p := strings.Split(s, ",")
 		var res []int
 		for _, input := range p {
+			input = strings.TrimSpace(input)
 			if strings.Contains(input, "-") { //-1 ["","1"]
 				r, err := transScope(input)
 				if err != nil {

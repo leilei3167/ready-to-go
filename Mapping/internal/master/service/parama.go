@@ -29,7 +29,7 @@ func CheckParams(c *gin.Context) (model.Param, error) {
 		return p, nil
 
 	case strings.Contains(content, "multipart/form-data"):
-		p.Type = "file"
+		p.Type = "File"
 		scanType := c.PostForm("scanType")
 		if scanType == "" {
 			return p, errors.New("scanType和file不能为空")
