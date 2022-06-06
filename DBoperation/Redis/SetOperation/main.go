@@ -3,8 +3,10 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/go-redis/redis/v8"
 	"log"
+	"time"
+
+	"github.com/go-redis/redis/v8"
 )
 
 var ctx context.Context //声明全局ctx
@@ -14,7 +16,7 @@ var rdb *redis.Client
 func init() {
 	ctx = context.Background()
 	rdb = redis.NewClient(&redis.Options{
-		Addr:     "192.168.67.130:6379",
+		Addr:     "127.0.0.1:6379",
 		Password: "",
 		DB:       0,
 	})
@@ -22,22 +24,21 @@ func init() {
 }
 func add() {
 	//向set中添加多个值
-	err := rdb.SAdd(ctx, "set", 1, "nihao", 4, "woshi leilei").Err()
+	IP := "124.223.174.63"
+	//插入ip
+	res, err := rdb.SAdd(ctx, IP, "").Result()
 	if err != nil {
-		log.Fatalln("sadd失败:", err)
-	} else {
-		fmt.Println("sadd成功!")
+		log.Fatal(err)
 	}
-	//返回set中的数量
-	val, err := rdb.SCard(ctx, "set").Result()
-	if err == redis.Nil {
-		fmt.Println("没有值!")
-	} else if err != nil {
-		log.Fatalln("scard失败:", err)
-	} else {
-		fmt.Println("set中此时的长度:", val)
+	if res == 0 {
+		log.Fatal("该ip在时间间隔内已扫描,丢弃")
+	}
 
+	if err := rdb.Expire(ctx, IP, time.Second*10).Err(); err != nil {
+		log.Fatal(err)
 	}
+	fmt.Println("该ip未扫描,执行扫描")
+
 }
 func find() {
 	//查找set中所有的值,sismember是根据value看是否是成员
@@ -74,7 +75,7 @@ func del() {
 
 func main() {
 	add()
-	find()
-	del()
+	//find()
+	//del()
 
 }

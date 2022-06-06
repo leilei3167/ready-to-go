@@ -3,7 +3,8 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/go-redis/redis/v8"
+
+	"github.com/go-redis/redis/v9"
 )
 
 var ctx = context.Background()
@@ -11,10 +12,11 @@ var ctx = context.Background()
 func example() {
 	//创建链接
 	rdb := redis.NewClient(&redis.Options{
-		Addr:     "192.168.67.130:6379",
+		Addr:     "127.0.0.1:6379",
 		Password: "",
 		DB:       0,
 	})
+
 	//插入一个string
 	err := rdb.Set(ctx, "key1", "v100", 0).Err()
 	if err != nil {
