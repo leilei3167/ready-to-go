@@ -16,11 +16,10 @@ type respData struct {
 
 func doCall(ctx context.Context) {
 
-	//1.不太理解,这一步应该是配置客户端
+	//配置transport
 	transport := http.Transport{
 
 		DisableKeepAlives: true,
-		
 	}
 	client := http.Client{
 		Transport: &transport,
@@ -28,7 +27,7 @@ func doCall(ctx context.Context) {
 
 	//2.创建数据通道,用协程处理来发请求数据,以及定义请求类型(会返回*Request)
 	respChan := make(chan *respData, 1)
-//NewRequest使用指定的方法、网址和可选的主题创建并返回一个新的*Request。
+	//NewRequest使用指定的方法、网址和可选的主题创建并返回一个新的*Request。
 	req, err := http.NewRequest("GET", "http://localhost:8080", nil)
 	if err != nil {
 		fmt.Printf("new requestg failed, err:%v\n", err)
