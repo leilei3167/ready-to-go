@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"runtime"
 )
 
 func main() {
@@ -38,4 +39,14 @@ func main() {
 		fmt.Println(!fileinfo.IsDir())
 		fmt.Println(fileinfo.Name())
 	}
+	fmt.Println("当前工作目录:", getCurrentDir())
+}
+
+//当前工作目录
+func getCurrentDir() string {
+	_, fileName, _, _ := runtime.Caller(1)
+	path, _ := filepath.Split(fileName)
+	/* 	aPath := strings.Split(fileName, "/")
+	   	dir := strings.Join(aPath[0:len(aPath)-1], "/") */
+	return path[:len(path)-1]
 }
