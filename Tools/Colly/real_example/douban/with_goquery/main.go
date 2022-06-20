@@ -34,7 +34,7 @@ func main() {
 	/* 获取icon */
 	c.OnHTML("head", func(e *colly.HTMLElement) { //head元素范围内
 		//Text() 是获取该节点的文本值,如 <title>【置顶】大撒大撒</title>
-		fmt.Println("title:", e.DOM.Find("title").Text()) //直接获取head中title元素的值
+		fmt.Println("title", e.DOM.Find("title").Text()) //直接获取head中title元素的值
 		//找到所有link元素
 		e.DOM.Find("link[rel*=icon]").Each(func(i int, s *goquery.Selection) {
 			//遍历打印所有的href的属性值
