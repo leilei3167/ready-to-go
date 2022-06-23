@@ -11,7 +11,6 @@ import (
 	"strconv"
 	"strings"
 	"time"
-	"unsafe"
 )
 
 var (
@@ -21,16 +20,33 @@ var (
 func main() {
 	flag.Parse()
 	start := time.Now()
-	a, err := ReadIPs(*name)
+	err := ReadIPs2(*name)
 	if err != nil {
 		log.Fatal(err)
 	}
-	b := "1.0.8.0-1.0.15.255"
+	/* 	b := "1.0.8.0-1.0.15.255"
 
-	log.Printf("len:%d,cap:%d,onesize:%d", len(a), cap(a), unsafe.Sizeof(b))
-	log.Printf("total_size:%d", 24*len(a))
-	log.Println("一些例子:", a[0], a[1000], a[9999])
+	   	log.Printf("len:%d,cap:%d,onesize:%d", len(a), cap(a), unsafe.Sizeof(b))
+	   	log.Printf("total_size:%d", 24*len(a))
+	   	log.Println("一些例子:", a[0], a[1000], a[9999]) */
 	log.Println("花费时间:", time.Since(start))
+}
+
+func ReadIPs2(filename string) (err error) {
+	file, err := os.Open(filename)
+	if err != nil {
+		return
+	}
+	scanner := bufio.NewScanner(file)
+	count := 0
+	for scanner.Scan() {
+		if scanner.Text() != "" {
+			count++
+		}
+	}
+	
+	fmt.Printf("总共%d行\n", count)
+	return
 }
 
 func ReadIPs(filename string) (s []string, err error) {
