@@ -41,6 +41,7 @@ require (
 	github.com/antchfx/htmlquery v1.2.5 // indirect
 	github.com/antchfx/xmlquery v1.3.11 // indirect
 	github.com/antchfx/xpath v1.2.1 // indirect
+	github.com/badoux/goscraper v0.0.0-20190827161153-36995ce6b19f // indirect
 	github.com/gobwas/glob v0.2.3 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect

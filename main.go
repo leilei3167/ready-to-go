@@ -1,30 +1,51 @@
 package main
 
 import (
+	"crypto/tls"
 	"fmt"
 	"log"
 	"net"
-	"os"
+	"net/http"
+	"net/url"
+	"time"
 )
 
 func main() {
-
-	ip, err := net.LookupHost("www.2szy.cn")
+	host := "http://182.61.25.124"
+	urls, err := url.Parse(host)
 	if err != nil {
-		log.Println(err)
-		os.Exit(1)
+		log.Fatal(err)
 	}
-	fmt.Printf("%+v\n", ip)
 
-	ips, err := net.LookupIP("www.qq.com")
+	tr := &http.Transport{
+		DialContext: (&net.Dialer{
+			Timeout: 3 * time.Second, //建立连接的超时
+		}).DialContext,
+		DisableKeepAlives: true, //告知服务端不启用长连接,避免占用端口资源
+		MaxIdleConns:      100,
+		TLSClientConfig:   &tls.Config{InsecureSkipVerify: true}, //跳过证书验证,确保自创证书的网站也能被收集
+	}
+
+	cli := http.Client{
+		Transport: tr,
+		CheckRedirect: func(req *http.Request, via []*http.Request) error {
+			fmt.Printf("[即将发出的请求]:%#v\n", req.URL.String())
+			for _, via1 := range via {
+				fmt.Printf("[之前已执行的请求]:%#v\n", via1.URL.String())
+			}
+			return nil
+		},
+	}
+
+	req, err := http.NewRequest("GET", urls.String(), nil)
 	if err != nil {
-		log.Println(err)
-		os.Exit(1)
+		log.Fatal(err)
 	}
-	fmt.Printf("%v\n", ips)
-
-	addr, err := net.LookupAddr("121.14.77.221")
-
-	fmt.Printf("%#v\n", addr)
+	fmt.Printf("[Req] URL:%#v\n", req.URL)
+	resp, err := cli.Do(req)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("[Resp] :%#v\n", resp.StatusCode)
 
 }
