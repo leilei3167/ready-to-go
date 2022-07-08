@@ -3,9 +3,6 @@ package main
 import (
 	"crypto/tls"
 	"fmt"
-	"github.com/gocolly/colly"
-	"github.com/gocolly/colly/extensions"
-	"github.com/sirupsen/logrus"
 	"log"
 	"net"
 	"net/http"
@@ -13,6 +10,10 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/gocolly/colly"
+	"github.com/gocolly/colly/extensions"
+	"github.com/sirupsen/logrus"
 )
 
 type WebData struct {
@@ -24,7 +25,7 @@ type WebData struct {
 }
 
 func main() {
-	url := "http://182.61.25.124"
+	url := "https://jahir.dev"
 	info, err := catchWebInfo(url)
 	if err != nil {
 		log.Fatal(err)
