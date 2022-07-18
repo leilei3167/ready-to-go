@@ -1,0 +1,42 @@
+package poker
+
+import (
+	"net/http"
+	"net/http/httptest"
+	"testing"
+)
+
+func TestRecordingWinsAndRetrievingThem(t *testing.T) {
+	//server_integration_test.go
+	database, cleanDatabase := CreateTempFile(t, `[]`)
+	defer cleanDatabase()
+	store, err := NewFileSystemPlayerStore(database)
+	assertNoError(t, err)
+	server := NewPlayerServer(store)
+	player := "Pepper"
+
+	server.ServeHTTP(httptest.NewRecorder(), newPostWinRequest(player))
+	server.ServeHTTP(httptest.NewRecorder(), newPostWinRequest(player))
+	server.ServeHTTP(httptest.NewRecorder(), newPostWinRequest(player))
+
+	t.Run("get score", func(t *testing.T) {
+		response := httptest.NewRecorder()
+		server.ServeHTTP(response, NewGetScoreRequest(player))
+		AssertStatus(t, response.Code, http.StatusOK)
+
+		AssertResponseBody(t, response.Body.String(), "3")
+	})
+
+	t.Run("get league", func(t *testing.T) {
+		response := httptest.NewRecorder()
+		server.ServeHTTP(response, newLeagueRequest())
+		AssertStatus(t, response.Code, http.StatusOK)
+
+		got := getLeagueFromResponse(t, response.Body)
+		want := []Player{
+			{"Pepper", 3},
+		}
+		assertLeague(t, got, want)
+	})
+
+}
